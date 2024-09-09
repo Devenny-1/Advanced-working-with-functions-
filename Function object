@@ -1,0 +1,66 @@
+The key difference between the two versions of `makeCounter` is **where the `count` variable is stored**:
+
+**First Code: Using `counter.count` (Property on Function)**
+In the first code, `count` is a **property** of the `counter` function itself. 
+The function `counter()` increments and returns `counter.count`. Here's how it works:
+
+```javascript
+function makeCounter() {
+  function counter() {
+    return counter.count++; // counter.count is a property on the function object
+  }
+
+  counter.count = 0; // Initializing counter.count as a property of the function
+
+  return counter;
+}
+
+let counter = makeCounter();
+console.log(counter()); // 0 (counter.count is returned, then incremented)
+console.log(counter()); // 1 (counter.count is returned, then incremented)
+```
+
+ **How it works:**
+- The function `counter` has a **property** `count` that is directly attached to it (`counter.count = 0`).
+- Every time `counter()` is called, it increments `counter.count` and returns the old value.
+- The `count` is not hidden or private. You can directly access and modify it by doing `counter.count` outside the function.
+
+### **Second Code: Using Lexical Environment (Private Variable)**
+In the second code, `count` is a **local variable** inside the `makeCounter` function. It’s not a property of the function but a **private** variable hidden within the closure. Here’s the code:
+
+```javascript
+function makeCounter() {
+  let count = 0; // Private variable inside the lexical environment
+
+  return function() {
+    return count++; // This function has access to `count` via closure
+  };
+}
+
+let counter = makeCounter();
+console.log(counter()); // 0 (count is returned, then incremented)
+console.log(counter()); // 1 (count is returned, then incremented)
+```
+
+ **How it works:**
+- `count` is a **private variable** inside the `makeCounter` function's scope.
+- Each time the inner function (returned by `makeCounter`) is called, it accesses and increments this hidden `count` variable.
+- You **cannot directly access or modify** `count` outside the function, because it’s not exposed like a property.
+
+
+ **Key Differences:**
+1. **Where `count` is stored:**
+   - **First code**: `count` is a property on the `counter` function object (`counter.count`).
+   - **Second code**: `count` is a private variable inside the lexical environment, inaccessible from outside.
+
+2. **Access to `count`:**
+   - **First code**: You can access and modify `counter.count` directly from outside the function.
+   - **Second code**: You cannot access or modify `count` directly; it's protected by the closure.
+
+3. **Encapsulation:**
+   - **First code**: The `count` is not encapsulated; it's a property of the function.
+   - **Second code**: The `count` is fully encapsulated (private) and only accessible within the function.
+
+ Conclusion:
+- The first code is more flexible, allowing external access to `count`, but it's less secure as the value can be modified from outside.
+- The second code provides better encapsulation and data protection since `count` is private and only modified internally.
