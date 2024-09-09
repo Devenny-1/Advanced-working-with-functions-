@@ -1,0 +1,47 @@
+ to gather all arguments into array args:
+
+function sumAll(...args) { // args is the name for the array
+  let sum = 0;
+
+  for (let arg of args) sum += arg;
+
+  return sum;
+}
+
+alert( sumAll(1) ); // 1
+alert( sumAll(1, 2) ); // 3
+alert( sumAll(1, 2, 3) ); // 6
+
+
+Write a function called sum that accepts any number of arguments and returns 
+the sum of those numbers using rest parameters.
+function sum(...numbers) {
+  return numbers.reduce((acc, curr) => acc + curr, 0);
+}
+
+console.log(sum(1, 2, 3)); // Output: 6
+console.log(sum(4, 5, 6, 7, 8)); // Output: 30
+
+
+You have two arrays of numbers. 
+Write a function called combineArrays that combines two arrays into one using spread syntax.
+
+function combineArrays(arr1, arr2) {
+  return [...arr1, ...arr2];
+}
+
+let array1 = [1, 2, 3];
+let array2 = [4, 5, 6];
+console.log(combineArrays(array1, array2)); // Output: [1, 2, 3, 4, 5, 6]
+
+
+Write a function called findMax that takes an array of numbers as input and returns 
+the maximum value in that array using the spread syntax with Math.max.
+
+function findMax(numbers) {
+  return Math.max(...numbers);
+}
+
+let nums = [5, 12, 7, 20, 14];
+console.log(findMax(nums)); // Output: 20
+

@@ -1,0 +1,42 @@
+what is a closure?
+ a closure is a function that rememebers its outer variables and can access them
+
+Here’s a simple breakdown of the concepts:
+
+Step 1: Variables and Lexical Environment
+- Lexical Environment is like a "hidden box" where variables live.
+- This "box" has two parts:
+  1. **Environment Record**: Stores all the variables.
+  2. **Outer Reference**: A link to the outer "box" (for example, global or parent scope).
+  
+- In global code (no functions), there is one "box" called the **Global Lexical Environment**.
+ Variables inside this are available everywhere in your script.
+  
+- Variables start as "uninitialized" until they are declared using `let`. Once declared, they become usable.
+
+Step 2: Function Declarations
+- Functions are also stored in the Lexical Environment.
+- Unlike variables declared with `let`, functions are **fully ready to use** right away.
+- That’s why you can call a function before it’s declared in the code.
+
+Step 3: Inner and Outer Lexical Environment
+- When you call a function, a new "box" is created for that function's variables.
+- If a function inside another function (or inside the global scope) needs a variable,
+ it will first check its own box (the inner one) and then check the outer boxes until it finds what it needs.
+  
+- Example: If you have a function that needs a variable from the global scope, it first checks inside its own "box" and, if it’s not there, it looks into the global "box".
+
+Step 4: Returning a Function (Closures)
+- When a function returns another function, the returned function remembers 
+the variables from where it was created. 
+- This is called a closure: a function that remembers and has 
+access to the outer variables, even when it's executed outside its original scope.
+
+Summary:
+- Lexical Environment: A "hidden box" that stores variables.
+- Functions are fully ready to use- when declared, unlike `let` variables.
+- Inner and outer environments: A function can access variables from the "outer box"
+ if it doesn't find them in its own.
+- Closures: Functions remember the variables where they were created and can access them later.
+
+This is how JavaScript manages variables and functions behind the scenes.
