@@ -1,0 +1,128 @@
+Can we change this by additional binding?
+
+What will be the output?
+
+function f() {
+  alert(this.name);
+}
+
+f = f.bind( {name: "John"} ).bind( {name: "Ann" } );
+
+f();
+
+The answer: John.
+
+The exotic bound function object returned by f.bind(...) remembers the context (and arguments if provided) 
+only at creation time.
+
+A function cannot be re-bound.
+
+(2) What will be the output?
+
+function f() {
+  alert( this ); // ?
+}
+
+let user = {
+  g: f.bind(null)
+};
+
+user.g();
+
+The answer: null.
+
+The context of a bound function is hard-fixed. There’s just no way to further change it.
+
+So even while we run user.g(), the original function is called with this=null.
+
+(3) There’s a value in the property of a function. Will it change after bind? Why, or why not?
+
+function sayHi() {
+  alert( this.name );
+}
+sayHi.test = 5;
+
+let bound = sayHi.bind({
+  name: "John"
+});
+
+alert( bound.test ); // what will be the output? why?
+
+the answer is undefined
+because the bind  does not have the bound property 
+The result of bind is another object. It does not have the test property.
+
+
+(4) The call to askPassword() in the code below should check the password and then call user.loginOk/loginFail depending on the answer.
+
+But it leads to an error. Why?
+
+Fix the highlighted line for everything to start working right (other lines are not to be changed).
+
+function askPassword(ok, fail) {
+  let password = prompt("Password?", '');
+  if (password == "rockstar") ok();
+  else fail();
+}
+
+let user = {
+  name: 'John',
+
+  loginOk() {
+    alert(`${this.name} logged in`);
+  },
+
+  loginFail() {
+    alert(`${this.name} failed to log in`);
+  },
+
+};
+
+askPassword(user.loginOk, user.loginFail);
+
+this code wont work because the object pproperty is undefined, it is not linked
+also, the function loses this (this is used to acces an object property)
+
+correction-- askPassword(user.loginOk.bind(user), user.loginFail.binf(user))
+
+(5) The task is a little more complex variant of Fix a function that loses "this".
+
+The user object was modified. Now instead of two functions loginOk/loginFail, it has a single function user.login(true/false).
+
+What should we pass askPassword in the code below, so that it calls user.login(true) as ok and user.login(false) as fail?
+
+function askPassword(ok, fail) {
+  let password = prompt("Password?", '');
+  if (password == "rockstar") ok();
+  else fail();
+}
+
+let user = {
+  name: 'John',
+
+  login(result) {
+    alert( this.name + (result ? ' logged in' : ' failed to log in') );
+  }
+};
+
+askPassword(?, ?); // ?
+Your changes should only modify the highlighted fragment.
+
+answer, we can use a wrapper function but an arrow function.
+askPassword(() => user.login(true), () => user.login(false));
+this line of code will get the outer variables
+
+The code `askPassword(() => user.login(true), () => user.login(false));` works like this:
+
+1. **Arrow Functions**: `() =>` is a way to define a short function in JavaScript. It doesn't have its 
+own `this`, so it uses `this` from where it was defined (in this case, `user`).
+
+2. **Calling `askPassword`**: You're passing two functions to `askPassword`:
+   - `() => user.login(true)` – This will run `user.login(true)` if the password is correct.
+   - `() => user.login(false)` – This will run `user.login(false)` if the password is wrong.
+
+3. **`this` Context**: The arrow function allows `user.login()` to use `user` as the correct `this` 
+context (so `this.name` refers to `'John'`).
+
+In summary, these arrow functions tell `askPassword` what to do in the case of success (log in) or 
+failure (fail to log in) without losing the `this` reference to the `user` object.

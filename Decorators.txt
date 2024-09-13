@@ -1,0 +1,59 @@
+Passing all arguments along with the context to another function is called CALL FORWARDING.
+
+the simplest form of it:
+
+let wrapper = function() {
+  return func.apply(this, arguments);
+};
+
+When an external code calls such wrapper, it is indistinguishable from the call of the original function func.
+
+function delay(f, ms) {
+
+  return function() {
+    setTimeout(() => f.apply(this, arguments), ms);
+  };
+
+}
+
+let f1000 = delay(alert, 1000);
+
+f1000("test"); // shows "test" after 1000ms
+
+EXPLANATION>> This code creates a function `delay` that takes two inputs:
+1. A function `f` (like `alert`).
+2. A delay time `ms` (in milliseconds).
+
+It returns a new function that, when called, waits for `ms` milliseconds and then runs the original function `f` 
+with the provided arguments.
+
+### Step-by-step explanation:
+
+1. **`delay(f, ms)`**:
+   - `f` is the function to be delayed (for example, `alert`).
+   - `ms` is the time to wait before running the function (e.g., 1000 milliseconds or 1 second).
+
+2. **Returned function**:
+   - Inside `delay`, we return a new function.
+   - This new function uses `setTimeout` to make the original function (`f`) run **after** `ms` milliseconds.
+
+3. **`setTimeout`**:
+   - `setTimeout` is a JavaScript function that runs some code after a certain amount of time (in this case, `ms`).
+   - We use an arrow function `() => f.apply(this, arguments)` inside `setTimeout` to ensure that the original 
+   function `f` is called with the correct context (`this`) and with the right arguments.
+
+4. **`f.apply(this, arguments)`**:
+   - This ensures that the original function (`f`) is called with the same `this` (context) and the same 
+   arguments that the delayed function was called with.
+
+### Example:
+
+1. **`let f1000 = delay(alert, 1000);`**:
+   - This creates a new function `f1000` that will wait 1000 milliseconds (1 second) before calling `alert`.
+
+2. **`f1000("test");`**:
+   - When you call `f1000` with `"test"`, it waits 1000 milliseconds, then runs `alert("test")`.
+
+### In short:
+- **`delay`** creates a version of a function that waits before running.
+- **`f1000("test")`** waits for 1 second, then shows the `"test"` message.
